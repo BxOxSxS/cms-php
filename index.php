@@ -16,10 +16,15 @@
     </form>
     <?php
         if(isset($_POST['submit'])) {
-            $imageInfo = getimagesize($_FILES["uploadFile"]["tmp_name"]);
+            $tmpFileUrl = $_FILES["uploadFile"]["tmp_name"];
+            $imageInfo = getimagesize($tmpFileUrl);
             if (!is_array($imageInfo)) {
                 die("BŁĄD: Nieprawidłowy format obrazu");
             }
+
+            $imgString = file_get_contents($tmpFileUrl);
+            $gdImage = imagecreatefromstring($imgString);
+
 
             $filename = $_FILES['uploadFile']['name'];
             $targetDir = "img/";
@@ -30,12 +35,13 @@
             $targetFile = $filename . hrtime(true);
             $targetFile = hash("sha256", $targetFile) . $targetExtension;
 
-            $targetUrl = $targetDir . $targetFile . "." . $targetExtension;
+            $targetUrl = $targetDir . $targetFile . ".webp";
 
             if(file_exists($targetUrl)) {
                 die("BŁĄD: Plik o tej nazwie już istnieje");
             }
-            move_uploaded_file($_FILES["uploadFile"]["tmp_name"], $targetUrl);
+            // move_uploaded_file($tmpFileUrl, $targetUrl);
+            imagewebp($gdImage, $targetUrl);
         }
     ?>
 </body>
