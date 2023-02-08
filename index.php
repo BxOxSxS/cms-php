@@ -9,10 +9,10 @@
 <body>
     <form action="" method="post" enctype="multipart/form-data">
         <label for="uploadfileinput">
-            Wybierz plik do wgrania na serwer: 
+            Wybierz obraz do wgrania na serwer: 
         </label>
         <input type="file" name="uploadFile" id="uploadfileinput">
-        <input type="submit" value="Wyślij plik" name="submit">
+        <input type="submit" value="Wyślij obraz" name="submit">
     </form>
     <?php
         if(isset($_POST['submit'])) {
