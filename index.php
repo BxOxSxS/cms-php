@@ -16,6 +16,11 @@
     </form>
     <?php
         if(isset($_POST['submit'])) {
+            $imageInfo = getimagesize($_FILES["uploadFile"]["tmp_name"]);
+            if (!is_array($imageInfo)) {
+                die("BŁĄD: Nieprawidłowy format obrazu");
+            }
+
             $filename = $_FILES['uploadFile']['name'];
             $targetDir = "img/";
             $targetExtension = pathinfo($filename, PATHINFO_EXTENSION);
