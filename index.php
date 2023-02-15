@@ -35,13 +35,27 @@
             $targetFile = $filename . hrtime(true);
             $targetFile = hash("sha256", $targetFile) . $targetExtension;
 
-            $targetUrl = $targetDir . $targetFile . ".webp";
+            $filename = $targetFile . ".webp";
+
+            $targetUrl = $targetDir . $filename;
 
             if(file_exists($targetUrl)) {
                 die("BŁĄD: Plik o tej nazwie już istnieje");
             }
             // move_uploaded_file($tmpFileUrl, $targetUrl);
             imagewebp($gdImage, $targetUrl);
+
+            $db = new mysqli("localhost", "root", "", "cms_bs");
+
+            $q = "INSERT post (id, timestamp, filename) VALUES (NULL, ?, ?)";
+            $preparedQ = $db->prepare($q);
+
+            $date = date('Y-m-d H:i:s');
+            $preparedQ->bind_param('ss', $date, $filename);
+            $result = $preparedQ->execute();
+            if (!$result) {
+                die("Błąd bazy danych");
+            }
         }
     ?>
 </body>
