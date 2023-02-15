@@ -15,6 +15,7 @@
         <input type="submit" value="Wyślij obraz" name="submit">
     </form>
     <?php
+        $db = new mysqli("localhost", "root", "", "cms_bs");
         if(isset($_POST['submit'])) {
             $tmpFileUrl = $_FILES["uploadFile"]["tmp_name"];
             $imageInfo = getimagesize($tmpFileUrl);
@@ -45,8 +46,6 @@
             // move_uploaded_file($tmpFileUrl, $targetUrl);
             imagewebp($gdImage, $targetUrl);
 
-            $db = new mysqli("localhost", "root", "", "cms_bs");
-
             $q = "INSERT post (id, timestamp, filename) VALUES (NULL, ?, ?)";
             $preparedQ = $db->prepare($q);
 
@@ -56,6 +55,17 @@
             if (!$result) {
                 die("Błąd bazy danych");
             }
+        }
+
+        $q = "SELECT * from post ORDER BY timestamp DESC";
+        $preparedQ = $db->prepare($q);
+
+        $preparedQ->execute();
+
+        $result = $preparedQ->get_result();
+
+        while ($row = $result->fetch_assoc()) {
+            echo "<img width='200px' src='img/" . $row['filename'] . "'><br>";
         }
     ?>
 </body>
