@@ -49,11 +49,11 @@
             // move_uploaded_file($tmpFileUrl, $targetUrl);
             imagewebp($gdImage, $targetUrl);
 
-            $q = "INSERT post (id, timestamp, filename) VALUES (NULL, ?, ?)";
+            $q = "INSERT post (id, timestamp, filename, ip) VALUES (NULL, ?, ?, ?)";
             $preparedQ = $db->prepare($q);
 
             $date = date('Y-m-d H:i:s');
-            $preparedQ->bind_param('ss', $date, $filename);
+            $preparedQ->bind_param('sss', $date, $filename, $_SERVER['REMOTE_ADDR']);
             $result = $preparedQ->execute();
             if (!$result) {
                 die("Błąd bazy danych");
@@ -68,7 +68,7 @@
         $result = $preparedQ->get_result();
 
         while ($row = $result->fetch_assoc()) {
-            echo "<div class='post'>" . $row['timestamp'] . "<br>";
+            echo "<div class='post'>" . $row['ip'] . " " . $row['timestamp'] . "<br>";
             echo "<img class='img' src='img/" . $row['filename'] . "'><br></div>";
         }
     ?>
