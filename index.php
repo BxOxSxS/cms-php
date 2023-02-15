@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>CMS</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <form action="" method="post" enctype="multipart/form-data">
@@ -12,8 +13,10 @@
             Wybierz obraz do wgrania na serwer: 
         </label>
         <input type="file" name="uploadFile" id="uploadfileinput">
+        <br>
         <input type="submit" value="Wyślij obraz" name="submit">
     </form>
+    <h1>Posty</h1>
     <?php
         $db = new mysqli("localhost", "root", "", "cms_bs");
         if(isset($_POST['submit'])) {
@@ -65,7 +68,8 @@
         $result = $preparedQ->get_result();
 
         while ($row = $result->fetch_assoc()) {
-            echo "<img width='200px' src='img/" . $row['filename'] . "'><br>";
+            echo "<div class='post'>" . $row['timestamp'] . "<br>";
+            echo "<img class='img' src='img/" . $row['filename'] . "'><br></div>";
         }
     ?>
 </body>
