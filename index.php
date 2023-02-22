@@ -68,7 +68,22 @@
         $result = $preparedQ->get_result();
 
         while ($row = $result->fetch_assoc()) {
-            echo "<div class='post'>" . $row['ip'] . " " . $row['timestamp'] . "<br>";
+            echo "<div class='post'>
+                <button type='button' class='comment'>
+                    💬
+                </button> 
+                <div class='vote'>
+                    <button class='upvote' type='button'>▲</button>
+                    <div class='votecounter'>69</div>
+                    <button class='downvote' type='button'>▼</button>
+                    
+                </div>
+                <div class='title'>
+                    <h2>Tytuł coś tam</h2> " 
+                    . $row['ip'] . " " . $row['timestamp'] . "<br>
+                </div>
+                
+            ";
             echo "<img class='img' src='img/" . $row['filename'] . "'><br></div>";
         }
     ?>
