@@ -24,5 +24,8 @@ if(isset($_POST['submit'])) {
         <br>
         <input type="submit" value="Wyślij obraz" name="submit">
     </form>
+    <?php
+        var_dump(Post::getPage());
+    ?>
 </body>
 </html>
