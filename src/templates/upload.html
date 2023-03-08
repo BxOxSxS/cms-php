@@ -1,0 +1,13 @@
+{%include 'header.html'%}
+    <h1>Wgraj mema</h1>
+<form action="" method="post" enctype="multipart/form-data">
+    <label for="title">Tytuł: </label>
+    <input type="text" id="titleInput" name="title"><br>
+    <label for="uploadfileinput">
+        Wybierz obraz do wgrania na serwer: 
+    </label>
+    <input type="file" name="uploadFile" id="uploadfileinput">
+    <br>
+    <input type="submit" value="Wyślij obraz" name="submit">
+</form>
+{%include 'footer.html'%}
