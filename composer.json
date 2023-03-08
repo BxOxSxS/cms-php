@@ -1,4 +1,6 @@
 {
     "name": "1358960/bsadowski",
-    "require": {}
+    "require": {
+        "steampixel/simple-php-router": "^0.7.1"
+    }
 }
