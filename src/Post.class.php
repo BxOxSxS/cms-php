@@ -10,6 +10,18 @@ class Post {
         $this->timeStamp = $timeStamp;
     }
 
+    public function getFilename() {
+        return $this->imageUrl;
+    }
+
+    public function getTitle() {
+        return $this->title;
+    }
+
+    public function getTimestamp() {
+        return $this->timeStamp;
+    }
+
     static function get(int $id) : Post {
         global $db;
 

@@ -1,5 +1,8 @@
 {%include 'header.html'%}
 <h1>Posty</h1>
+<a href="upload">Wgraj mema</a>
+<br><br>
+{% for post in posts %}
 
 <div class='post'>
     <button type='button' class='comment'>
@@ -12,9 +15,10 @@
         
     </div>
     <div class='title'>
-        <h2>Tytuł coś tam</h2>
-        {{ip}} {{timestamp}}<br>
+        <h2>{{ post.getTitle() }}</h2>
+        {{ post.getTimestamp() }}<br>
     </div>
-<img class='img' src="img/{{filename}}"><br></div>
+<img class='img' src="{{ post.getFilename() }}"><br></div>
+{% endfor %}
 
 {%include 'footer.html'%}
