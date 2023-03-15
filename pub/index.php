@@ -25,7 +25,9 @@ Route::add('/upload', function() {
     $title = $_POST['title'];
     Post::upload($tempFileName, $title);
 
-    $twig->display("index.html");
+    // $twig->display("index.html");
+    header('Location: /bsadowski/pub');
+    die();
 }, 'post');
 
 Route::run('/bsadowski/pub');

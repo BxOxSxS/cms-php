@@ -46,9 +46,9 @@ class Post {
     static function getPage(int $pageNumber = 1, int $postsPerPage = 10) : array {
         global $db;
 
-        $q = $db->prepare("SELECT * FROM post LIMIT 10 OFFSET ?");
+        $q = $db->prepare("SELECT * FROM post ORDER BY timestamp DESC LIMIT ? OFFSET ?");
         $offset = ($pageNumber -1) * $postsPerPage;
-        $q->bind_param('i', $offset);
+        $q->bind_param('ii', $postsPerPage, $offset);
         $q->execute();
         $result = $q->get_result();
         $postArray = array();
