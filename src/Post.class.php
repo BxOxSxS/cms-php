@@ -1,13 +1,21 @@
 <?php
 class Post {
+    private int $id;
     private string $title;
     private string $imageUrl;
     private string $timeStamp;
+    private int $authorId;
+    private string $authorName;
 
-    function __construct(string $title, string $imageUrl, string $timeStamp) {
+    function __construct(int $i, string $f, string $t, string $title, int $authorId) {
+        $this->id = $i;
+        $this->imageUrl = $f;
+        $this->timeStamp = $t;
         $this->title = $title;
-        $this->imageUrl = $imageUrl;
-        $this->timeStamp = $timeStamp;
+        $this->authorId = $authorId;
+        global $db;
+        $this->authorName = User::getNameById($this->authorId);
+
     }
 
     public function getFilename() {
@@ -21,17 +29,20 @@ class Post {
     public function getTimestamp() {
         return $this->timeStamp;
     }
-
-    static function get(int $id) : Post {
-        global $db;
-
-        $q = $db->prepare("SELECT * FROM post WHERE id = ?");
-        $q->bind_param('i', $id);
-        $q->execute();
-        $result = $q->get_result();
-        $resultArray = $result->fetch_array();
-        return new Post($resultArray['title'], $resultArray['filename'], $result['timestamp']);
+    public function getAuthorName() {
+        return $this->authorName;
     }
+
+    // static function get(int $id) : Post {
+    //     global $db;
+
+    //     $q = $db->prepare("SELECT * FROM post WHERE id = ?");
+    //     $q->bind_param('i', $id);
+    //     $q->execute();
+    //     $result = $q->get_result();
+    //     $resultArray = $result->fetch_array();
+    //     return new Post($resultArray['title'], $resultArray['filename'], $result['timestamp']);
+    // }
 
     static function getLast() : Post {
         global $db;
@@ -39,7 +50,7 @@ class Post {
         $query->execute();
         $result = $query->get_result();
         $row = $result->fetch_assoc();
-        $p = new Post($row['id'], $row['filename'], $row['timestamp']);
+        $p = new Post($row['id'], $row['filename'], $row['timestamp'], $row['title'], (int)$row['userId']);
         return $p;
     }
 
@@ -53,13 +64,14 @@ class Post {
         $result = $q->get_result();
         $postArray = array();
         while($row = $result->fetch_array()) {
-            $post = new Post($row['title'], $row['filename'], $row['timestamp']);
+        global $db;
+            $post = new Post($row['id'], $row['filename'], $row['timestamp'], $row['title'], $row['userId']);
             array_push($postArray, $post);
         }
         return $postArray;
     }
 
-    static function upload(string $tempFilename, string $title = "") {
+    static function upload(string $tempFilename, string $title = "", int $userId) {
         $targetDir = "img/";
 
         $imageInfo = getimagesize($tempFilename);
@@ -83,11 +95,11 @@ class Post {
 
         global $db;
 
-        $q = "INSERT post (id, timestamp, filename, ip, title) VALUES (NULL, ?, ?, ?, ?)";
+        $q = "INSERT post (id, timestamp, filename, ip, title, userId) VALUES (NULL, ?, ?, ?, ?, ?)";
         $preparedQ = $db->prepare($q);
 
         $date = date('Y-m-d H:i:s');
-        $preparedQ->bind_param('ssss', $date, $targetFileName, $_SERVER['REMOTE_ADDR'], $title);
+        $preparedQ->bind_param('ssssi', $date, $targetFileName, $_SERVER['REMOTE_ADDR'], $title, $userId);
         $result = $preparedQ->execute();
         if (!$result) {
             die("Błąd bazy danych");

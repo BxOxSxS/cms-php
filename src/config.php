@@ -1,6 +1,7 @@
 <?php
 require("./../vendor/autoload.php");
 require('./../src/Post.class.php');
+require('./../src/User.class.php');
 
 $db = new mysqli("localhost", "root", "", "cms_bs");
 

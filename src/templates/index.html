@@ -1,5 +1,13 @@
 {%include 'header.html'%}
 <h1>Posty</h1>
+
+<div id="pageContainer">
+    <h1>{{pageTitle}}</h1>
+    {# jeśli użytkownik jest zalogowany to pokaż #}
+    {% if user is defined %}
+    <div id="loggedUser">Zalogowany użytkownik: {{ user.getName() }} </div>
+    {% endif %}
+</div>
 <a href="upload">Wgraj mema</a>
 <br><br>
 {% for post in posts %}
@@ -16,6 +24,7 @@
     </div>
     <div class='title'>
         <h2>{{ post.getTitle() }}</h2>
+        Autor: {{post.getAuthorName() }}<br>
         {{ post.getTimestamp() }}<br>
     </div>
 <img class='img' src="{{ post.getFilename() }}"><br></div>

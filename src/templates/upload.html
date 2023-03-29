@@ -1,13 +1,19 @@
 {%include 'header.html'%}
-    <h1>Wgraj mema</h1>
-<form action="" method="post" enctype="multipart/form-data">
-    <label for="title">Tytuł: </label>
-    <input type="text" id="titleInput" name="title"><br>
-    <label for="uploadfileinput">
-        Wybierz obraz do wgrania na serwer: 
-    </label>
-    <input type="file" name="uploadFile" id="uploadfileinput">
-    <br>
-    <input type="submit" value="Wyślij obraz" name="submit">
-</form>
+<div id="pageContainer">
+    {% if user is defined %}
+    <div id="loggedUser">Zalogowany użytkownik: {{ user.getName() }} </div>
+    {% endif %}
+    <form action="" method="post" enctype="multipart/form-data">
+        <label for="titleInput">Tytuł obrazka</label>
+        <input type="text" name="title" id="titleInput"><br>
+        <label for="uploadedfileinput">
+            Wybierz plik do wgrania na serwer:
+        </label><br>
+        {% if user is defined %}
+        <input type="hidden" name="userId" value={{ user.getId() }}>
+        {% endif %}
+        <input type="file" name="uploadedFile" id="uploadedfileinput" required><br>
+        <input type="submit" value="Wyślij plik" name="submit"><br>
+    </form>
+</div>
 {%include 'footer.html'%}

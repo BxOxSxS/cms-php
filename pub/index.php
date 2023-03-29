@@ -1,5 +1,6 @@
 <?php
 require("./../src/config.php");
+session_start();
 
 use Steampixel\Route;
 
@@ -8,26 +9,67 @@ Route::add('/', function() {
     
     $posts = Post::getPage();
     $t = array("posts" => $posts);
-    
+    if(isset($_SESSION['user'])) {
+        $t['user'] = $_SESSION['user'];
+    }
     
     $twig->display("index.html", $t);
 });
 
 Route::add('/upload', function() {
     global $twig;
-    $twig->display("upload.html");
+
+    if(User::isAuth()) {
+        $t['user'] = $_SESSION['user'];
+        $twig->display("upload.html", $t);
+    } else {
+        http_response_code(403);
+    }
 });
 
 Route::add('/upload', function() {
     global $twig;
 
-    $tempFileName = $_FILES['uploadFile']['tmp_name'];
+    $tempFileName = $_FILES['uploadedFile']['tmp_name'];
     $title = $_POST['title'];
-    Post::upload($tempFileName, $title);
+    Post::upload($tempFileName, $title, $_POST['userId']);
 
     // $twig->display("index.html");
     header('Location: /bsadowski/pub');
     die();
+}, 'post');
+
+Route::add('/register', function() {
+    global $twig;
+    $twigData = array("pageTitle" => "Zarejestruj użytkownika");
+    $twig->display("register.html", $twigData);
+});
+
+Route::add('/register', function(){
+    global $twig;
+    if(isset($_POST['submit'])) {
+        User::register($_POST['email'], $_POST['password']);
+        header("Location: /bsadowski/pub");
+    }
+}, 'post');
+
+Route::add('/login', function(){
+    global $twig;
+    $twigData = array("pageTitle" => "Zaloguj użytkownika");
+    $twig->display("login.html", $twigData);
+});
+
+Route::add('/login', function() {
+    global $twig;
+    if(isset($_POST['submit'])) {
+        if (User::login($_POST['email'], $_POST['password'])) {
+            header("Location: /bsadowski/pub");
+        } else {
+            $t = array("message" => "Nieprawidłowy użytkownik lub hasło");
+            $twig->display("login.html", $t);
+        }
+    }
+
 }, 'post');
 
 Route::run('/bsadowski/pub');
