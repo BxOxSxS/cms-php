@@ -43,6 +43,9 @@ class Post {
     //     $resultArray = $result->fetch_array();
     //     return new Post($resultArray['title'], $resultArray['filename'], $result['timestamp']);
     // }
+    public function getId() {
+        return $this->id;
+    }
 
     static function getLast() : Post {
         global $db;
@@ -57,7 +60,7 @@ class Post {
     static function getPage(int $pageNumber = 1, int $postsPerPage = 10) : array {
         global $db;
 
-        $q = $db->prepare("SELECT * FROM post ORDER BY timestamp DESC LIMIT ? OFFSET ?");
+        $q = $db->prepare("SELECT * FROM post WHERE removed = false ORDER BY timestamp DESC LIMIT ? OFFSET ?");
         $offset = ($pageNumber -1) * $postsPerPage;
         $q->bind_param('ii', $postsPerPage, $offset);
         $q->execute();
@@ -95,7 +98,7 @@ class Post {
 
         global $db;
 
-        $q = "INSERT post (id, timestamp, filename, ip, title, userId) VALUES (NULL, ?, ?, ?, ?, ?)";
+        $q = "INSERT post (id, timestamp, filename, ip, title, userId, removed) VALUES (NULL, ?, ?, ?, ?, ?, false)";
         $preparedQ = $db->prepare($q);
 
         $date = date('Y-m-d H:i:s');
@@ -103,6 +106,17 @@ class Post {
         $result = $preparedQ->execute();
         if (!$result) {
             die("Błąd bazy danych");
+        }
+    }
+
+    static function remove(int $id) : bool {
+        global $db;
+        $q = $db->prepare("UPDATE post SET removed = true WHERE id = ?");
+        $q->bind_param('i', $id);
+        if ($q->execute()) {
+            return true;
+        } else {
+            return false;
         }
     }
 }

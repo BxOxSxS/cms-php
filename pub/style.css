@@ -34,3 +34,15 @@ body {
     height: 5em;
     width: 3em;
 }
+
+.thumbnail {
+    width: 20em;
+}
+
+table, tr, th, td {
+    border:  1px solid white;
+    border-collapse: collapse;
+}
+table {
+    width: 100%;
+}

@@ -72,5 +72,25 @@ Route::add('/login', function() {
 
 }, 'post');
 
+Route::add('/admin', function() {
+    global $twig;
+    if(User::isAuth()) {
+        $t = array( "postList" => Post::getPage(1, 100));
+        $twig->display("admin.html", $t);
+
+    } else {
+        http_response_code(403);
+    }
+});
+
+Route::add('/admin/remove/([0-9]*)', function($id) {
+    if(User::isAuth()) {
+        Post::remove($id);
+        header("Location: /bsadowski/pub/admin");
+    } else {
+        http_response_code(403);
+    }
+});
+
 Route::run('/bsadowski/pub');
 ?>

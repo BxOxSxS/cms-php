@@ -1,0 +1,22 @@
+{%include 'header.html'%}
+<div id="pageContainer">
+    <table>
+        <tr>
+            <th>Ban</th>
+            <th>Czas</th>
+            <th>Tytuł</th>
+            <th>Autor</th>
+            <th>Obraz</th>
+        </tr>
+    {% for post in postList %}
+        <tr>
+            <td><a href="admin/remove/{{post.getId() }}">Ukryj</a></td>
+            <td>{{ post.getTimestamp() }}</td>
+            <td>{{ post.getTitle() }}</td>
+            <td>{{ post.getAuthorName() }}</td>
+            <td><img src="{{ post.getFilename() }}" class="thumbnail"></td>
+        </tr>
+    {% endfor %}
+    </table>
+</div>
+{%include 'footer.html'%}
