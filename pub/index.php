@@ -92,5 +92,23 @@ Route::add('/admin/remove/([0-9]*)', function($id) {
     }
 });
 
+Route::add('/like/([0-9]*)', function($post_id) {
+    if(!User::isAuth()) {
+        http_response_code(403);
+    }
+    $user_id = $_SESSION['user']->getId();
+    $like = new Likes($post_id, $user_id, 1);
+    header("Location: /bsadowski/pub");
+});
+
+Route::add('/dislike/([0-9]*)', function($post_id) {
+    if(!User::isAuth()) {
+        http_response_code(403);
+    }
+    $user_id = $_SESSION['user']->getId();
+    $like = new Likes($post_id, $user_id, -1);
+    header("Location: /bsadowski/pub");
+});
+
 Route::run('/bsadowski/pub');
 ?>

@@ -17,9 +17,9 @@
         💬
     </button> 
     <div class='vote'>
-        <button class='upvote' type='button'>▲</button>
-        <div class='votecounter'>69</div>
-        <button class='downvote' type='button'>▼</button>
+        <button onclick="location.href='like/{{ post.getId() }}'" class='upvote' type='button'>▲</button>
+        <div class='votecounter'>{{ post.getLikes() }}</div>
+        <button onclick="location.href='dislike/{{ post.getId() }}'" class='downvote' type='button'>▼</button>
         
     </div>
     <div class='title'>

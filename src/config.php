@@ -2,6 +2,7 @@
 require("./../vendor/autoload.php");
 require('./../src/Post.class.php');
 require('./../src/User.class.php');
+require('./../src/Likes.class.php');
 
 $db = new mysqli("localhost", "root", "", "cms_bs");
 
