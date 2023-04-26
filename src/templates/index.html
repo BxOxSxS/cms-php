@@ -21,9 +21,9 @@
 {% for post in posts %}
 
 <div class='post'>
-    <button type='button' class='comment'>
+    <!-- <button type='button' class='comment'>
         💬
-    </button> 
+    </button>  -->
     <div class='vote'>
         <button onclick="location.href='like/{{ post.getId() }}'" class='upvote' type='button'>▲</button>
         <div class='votecounter'>{{ post.getLikes() }}</div>
