@@ -20,9 +20,22 @@ class Likes {
         global $db;
         $user_id = $this->user_id;
         $post_id = $this->post_id;
-        $q = $db->prepare("DELETE FROM likes WHERE user_id = ? AND post_id = ?");
-        $q->bind_param('ii', $user_id, $post_id);
-        $q->execute();
+
+        $q = $db->prepare("SELECT value FROM likes WHERE user_id = ? AND post_id = ?");
+        if ($q != false) {
+            $q->bind_param('ii', $user_id, $post_id);
+            $q->execute();
+            $result = $q->get_result();
+
+            while($row = $result->fetch_array()) {
+                $qd = $db->prepare("DELETE FROM likes WHERE user_id = ? AND post_id = ?");
+                $qd->bind_param('ii', $user_id, $post_id);
+                $qd->execute();
+                return;
+            }
+        }
+
+        
 
         $q2 = $db->prepare("INSERT likes (id, post_id, user_id, value) VALUES (NULL, ?, ?, ?)");
 
