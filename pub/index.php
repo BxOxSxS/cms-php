@@ -49,7 +49,7 @@ Route::add('/register', function(){
     global $twig;
     if(isset($_POST['submit'])) {
         User::register($_POST['email'], $_POST['password']);
-        header("Location: /bsadowski/pub");
+        header("Location: /bsadowski/pub/login");
     }
 }, 'post');
 
