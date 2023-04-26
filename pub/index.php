@@ -112,5 +112,10 @@ Route::add('/dislike/([0-9]*)', function($post_id) {
     }
 });
 
+Route::add('/logout', function() {
+    session_destroy();
+    header("Location: /bsadowski/pub");
+});
+
 Route::run('/bsadowski/pub');
 ?>

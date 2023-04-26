@@ -6,6 +6,14 @@
     {# jeśli użytkownik jest zalogowany to pokaż #}
     {% if user is defined %}
     <div id="loggedUser">Zalogowany użytkownik: {{ user.getName() }} </div>
+    <br>
+    <a href="logout">Wyloguj</a>
+    <br><br>
+    {% else %}
+    <a href="login">Logowanie</a>
+    <br>
+    <a href="register">Rejestracja</a>
+    <br><br>
     {% endif %}
 </div>
 <a href="upload">Wgraj mema</a>
