@@ -3,6 +3,7 @@
     <table>
         <tr>
             <th>Ban</th>
+            <th>Ocena</th>
             <th>Czas</th>
             <th>Tytuł</th>
             <th>Autor</th>
@@ -11,6 +12,7 @@
     {% for post in postList %}
         <tr>
             <td><a href="admin/remove/{{post.getId() }}">Ukryj</a></td>
+            <td>{{ post.getLikes() }}</td>
             <td>{{ post.getTimestamp() }}</td>
             <td>{{ post.getTitle() }}</td>
             <td>{{ post.getAuthorName() }}</td>
