@@ -1,29 +1,27 @@
 <?php
 class Post {
     private int $id;
-    private string $title;
-    private string $imageUrl;
+    private string $content;
     private string $timeStamp;
     private int $authorId;
     private string $authorName;
 
-    function __construct(int $i, string $f, string $t, string $title, int $authorId) {
+    function __construct(int $i, string $t, string $title, int $authorId) {
         $this->id = $i;
-        $this->imageUrl = $f;
         $this->timeStamp = $t;
-        $this->title = $title;
+        $this->content = $title;
         $this->authorId = $authorId;
         global $db;
         $this->authorName = User::getNameById($this->authorId);
 
     }
 
-    public function getFilename() {
-        return $this->imageUrl;
-    }
+    // public function getFilename() {
+    //     return $this->imageUrl;
+    // }
 
     public function getTitle() {
-        return $this->title;
+        return $this->content;
     }
 
     public function getTimestamp() {
@@ -31,6 +29,10 @@ class Post {
     }
     public function getAuthorName() {
         return $this->authorName;
+    }
+
+    public function getAuthorId() {
+        return $this->authorId;
     }
 
     // static function get(int $id) : Post {
@@ -60,7 +62,7 @@ class Post {
     static function getPage(int $pageNumber = 1, int $postsPerPage = 10) : array {
         global $db;
 
-        $q = $db->prepare("SELECT * FROM post WHERE removed = false ORDER BY timestamp DESC LIMIT ? OFFSET ?");
+        $q = $db->prepare("SELECT * FROM posts ORDER BY timestamp DESC LIMIT ? OFFSET ?");
         $offset = ($pageNumber -1) * $postsPerPage;
         $q->bind_param('ii', $postsPerPage, $offset);
         $q->execute();
@@ -68,13 +70,29 @@ class Post {
         $postArray = array();
         while($row = $result->fetch_array()) {
         global $db;
-            $post = new Post($row['id'], $row['filename'], $row['timestamp'], $row['title'], $row['userId']);
+            $post = new Post($row['id'], $row['timestamp'], $row['content'], $row['user_id']);
             array_push($postArray, $post);
         }
         return $postArray;
     }
 
-    static function upload(string $tempFilename, string $title = "", int $userId) {
+    static function getUserPosts(int $userId) : array {
+        global $db;
+
+        $q = $db->prepare("SELECT * FROM posts WHERE user_id = ? ORDER BY timestamp DESC");
+        $q->bind_param('i', $userId);
+        $q->execute();
+        $result = $q->get_result();
+        $postArray = array();
+        while($row = $result->fetch_array()) {
+        global $db;
+            $post = new Post($row['id'], $row['timestamp'], $row['content'], $row['user_id']);
+            array_push($postArray, $post);
+        }
+        return $postArray;
+    }
+
+    static function upload(string $tempFilename, int $userId, string $title = "") {
         $targetDir = "img/";
 
         $imageInfo = getimagesize($tempFilename);
