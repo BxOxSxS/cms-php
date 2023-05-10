@@ -35,7 +35,7 @@ Route::add('/upload', function() {
     Post::upload($tempFileName, $title, $_POST['userId']);
 
     // $twig->display("index.html");
-    header('Location: /bsadowski/pub');
+    header('Location: /cms-php/pub');
     die();
 }, 'post');
 
@@ -49,7 +49,7 @@ Route::add('/register', function(){
     global $twig;
     if(isset($_POST['submit'])) {
         User::register($_POST['email'], $_POST['password']);
-        header("Location: /bsadowski/pub/login");
+        header("Location: /cms-php/pub/login");
     }
 }, 'post');
 
@@ -63,7 +63,7 @@ Route::add('/login', function() {
     global $twig;
     if(isset($_POST['submit'])) {
         if (User::login($_POST['email'], $_POST['password'])) {
-            header("Location: /bsadowski/pub");
+            header("Location: /cms-php/pub");
         } else {
             $t = array("message" => "Nieprawidłowy użytkownik lub hasło");
             $twig->display("login.html", $t);
@@ -86,7 +86,7 @@ Route::add('/admin', function() {
 Route::add('/admin/remove/([0-9]*)', function($id) {
     if(User::isAuth()) {
         Post::remove($id);
-        header("Location: /bsadowski/pub/admin");
+        header("Location: /cms-php/pub/admin");
     } else {
         http_response_code(403);
     }
@@ -98,7 +98,7 @@ Route::add('/like/([0-9]*)', function($post_id) {
     } else {
         $user_id = $_SESSION['user']->getId();
         $like = new Likes($post_id, $user_id, 1);
-        header("Location: /bsadowski/pub");
+        header("Location: /cms-php/pub");
     }
 });
 
@@ -108,14 +108,14 @@ Route::add('/dislike/([0-9]*)', function($post_id) {
     } else {
         $user_id = $_SESSION['user']->getId();
         $like = new Likes($post_id, $user_id, -1);
-        header("Location: /bsadowski/pub");
+        header("Location: /cms-php/pub");
     }
 });
 
 Route::add('/logout', function() {
     session_destroy();
-    header("Location: /bsadowski/pub");
+    header("Location: /cms-php/pub");
 });
 
-Route::run('/bsadowski/pub');
+Route::run('/cms-php/pub');
 ?>

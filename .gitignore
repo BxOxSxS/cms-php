@@ -1,2 +1,3 @@
 /vendor/
-/pub/img/*
+/pub/img/**
+!/pub/img/._
